@@ -1,8 +1,5 @@
 package edu.hust.set.lora_app.services;
 
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.function.BiConsumer;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -31,10 +28,16 @@ public class TTNMqttService {
             if (_data instanceof UplinkMessage) {
                 UplinkMessage msg = (UplinkMessage) _data;
                 String device_id = _devId;
-                Double amount = Double.parseDouble(msg.getPayloadFields().get("amount").toString());
+                Double temperature = Double.parseDouble(msg.getPayloadFields().get("temperature").toString());
+                Double humidity = Double.parseDouble(msg.getPayloadFields().get("humidity").toString());
+                Double light = Double.parseDouble(msg.getPayloadFields().get("light").toString());
+                String time = msg.getMetadata().getTime();
                 Packet packet = new Packet();
-                packet.setAmount(amount);
                 packet.setDevice_id(device_id);
+                packet.setTemperature(temperature);
+                packet.setHumidity(humidity);
+                packet.setDateTime(time);
+                packet.setLight(light);
                 packetRepository.save(packet);
             }
         }

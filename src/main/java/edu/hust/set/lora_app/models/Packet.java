@@ -1,7 +1,5 @@
 package edu.hust.set.lora_app.models;
 
-import java.sql.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,20 +13,55 @@ public class Packet {
 
     private String device_id;
 
-    private Double amount;
+    private String dateTime;
 
-    private Date dateTime;
+    private Double temperature;
 
-    public Double getAmount() {
-        return amount;
+    private Double humidity;
+
+    private Double light;
+
+    private Boolean hasHumman;
+
+    public Double getLight() {
+        return light;
     }
 
-    public Date getDateTime() {
+    public Boolean getHasHumman() {
+        return hasHumman;
+    }
+
+    public void setHasHumman(Boolean hasHumman) {
+        this.hasHumman = hasHumman;
+    }
+
+    public String getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public void setLight(Double light) {
+        this.light = light;
+    }
+
+    public Double getHumidity() {
+ 
+        return humidity;
+    }
+
+    public void setHumidity(Double humidity) {
+        this.humidity = humidity;
+    }
+
+    public Double getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(Double temperature) {
+        this.temperature = temperature;
     }
 
     public String getDevice_id() {
@@ -37,10 +70,6 @@ public class Packet {
 
     public void setDevice_id(String device_id) {
         this.device_id = device_id;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
     }
 
 }
