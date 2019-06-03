@@ -1,16 +1,11 @@
 package edu.hust.set.lora_app.models;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Packet {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-
     private String device_id;
 
     private String dateTime;
@@ -21,17 +16,17 @@ public class Packet {
 
     private Double light;
 
-    private Boolean hasHumman;
+    private int hasHumman;
 
     public Double getLight() {
         return light;
     }
 
-    public Boolean getHasHumman() {
+    public int getHasHumman() {
         return hasHumman;
     }
 
-    public void setHasHumman(Boolean hasHumman) {
+    public void setHasHumman(int hasHumman) {
         this.hasHumman = hasHumman;
     }
 

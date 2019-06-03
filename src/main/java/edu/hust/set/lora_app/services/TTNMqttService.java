@@ -1,5 +1,7 @@
 package edu.hust.set.lora_app.services;
 
+import java.io.IOException;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -32,14 +34,34 @@ public class TTNMqttService {
                 Double humidity = Double.parseDouble(msg.getPayloadFields().get("humidity").toString());
                 Double light = Double.parseDouble(msg.getPayloadFields().get("light").toString());
                 String time = msg.getMetadata().getTime();
-                Packet packet = new Packet();
+                Packet packet;
+                Optional<Packet> result = packetRepository.findById(device_id);
+                if (result.isPresent()) {
+                    packet = result.get();
+                } else {
+                    packet = new Packet();
+                }
                 packet.setDevice_id(device_id);
                 packet.setTemperature(temperature);
                 packet.setHumidity(humidity);
                 packet.setDateTime(time);
                 packet.setLight(light);
+                try {
+                    packet.setHasHumman(this.checkHuman(humidity, light, temperature));
+                } catch (Exception e) {
+                }
                 packetRepository.save(packet);
             }
+        }
+
+        private int checkHuman(Double humidity, Double light, Double temperature) throws Exception {
+            Runtime rt = Runtime.getRuntime();
+            Process pr = rt.exec("python3 service_python/run_model.py " + humidity + " " + light + " " + temperature);
+            int code =  pr.waitFor();
+            if (code == -1) {
+                throw new Exception();
+            }
+            return code;
         }
     };
 
@@ -53,7 +75,7 @@ public class TTNMqttService {
         client.onError((Throwable _error) -> System.err.println("error: " + _error.getMessage()));
         client.onConnected((Connection _client) -> System.out.println("connected !"));
         client.onMessage(onPayloadHandler);
-        client.start();  
+        client.start();
     }
 
     public void Disconnect() throws MqttException {
