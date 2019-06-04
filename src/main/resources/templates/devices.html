@@ -1,0 +1,33 @@
+<!DOCTYPE html>  
+<html lang="en" xmlns:th="http://www.springframework.org/schema/data/jaxb">  
+<head>  
+    <title>device List</title>  
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>  
+    <link type="text/css" rel="stylesheet" href="bootstrap.min.css" th:href="@{bootstrap.min.css}"/>  
+</head>  
+<body>  
+<div class="col-3"></div>  
+<div class="container col-6">  
+    <h1>Manage device</h1>  
+    <table class="table table-active">  
+        <tr>  
+            <th>Device id</th>  
+            <th>Date Time</th>  
+            <th>Temperature</th>  
+            <th>Humidity</th>  
+            <th>Light</th>  
+            <th>Has Humman?</th>  
+        </tr>  
+        <tr th:each="device : ${devices}">  
+            <td th:text="${device.device_id}"></td>  
+            <td th:text="${device.dateTime}"></td>  
+            <td><span th:text="${device.temperature}"></span><sup>o</sup>C</td>
+            <td><span th:text="${device.humidity}"></span>%</td>  
+            <td><span th:text="${device.light}"></span> lux</td>
+            <td th:if="${device.hasHumman == 1}">Yes</td>
+            <td th:if="${device.hasHumman == 0}">No</td>
+        </tr>  
+    </table>
+</div>  
+</body>  
+</html>

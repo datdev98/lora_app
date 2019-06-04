@@ -12,8 +12,8 @@ import org.thethingsnetwork.data.common.messages.DataMessage;
 import org.thethingsnetwork.data.common.messages.UplinkMessage;
 import org.thethingsnetwork.data.mqtt.Client;
 
-import edu.hust.set.lora_app.models.Packet;
-import edu.hust.set.lora_app.repositories.PacketRepository;
+import edu.hust.set.lora_app.models.Device;
+import edu.hust.set.lora_app.repositories.DeviceRepository;
 
 @Service
 public class TTNMqttService {
@@ -21,7 +21,7 @@ public class TTNMqttService {
     private final String appId = "lora_app_project2";
     private final String accessKey = "ttn-account-v2.kkkZKlOCkrt5bjauBaP7e8dhJmKkKfMUZa87bc_doEY";
     private Client client;
-    private final PacketRepository packetRepository;
+    private final DeviceRepository packetRepository;
 
     private BiConsumer<String, DataMessage> onPayloadHandler = new BiConsumer<String, DataMessage>() {
 
@@ -34,23 +34,23 @@ public class TTNMqttService {
                 Double humidity = Double.parseDouble(msg.getPayloadFields().get("humidity").toString());
                 Double light = Double.parseDouble(msg.getPayloadFields().get("light").toString());
                 String time = msg.getMetadata().getTime();
-                Packet packet;
-                Optional<Packet> result = packetRepository.findById(device_id);
+                Device device;
+                Optional<Device> result = packetRepository.findById(device_id);
                 if (result.isPresent()) {
-                    packet = result.get();
+                    device = result.get();
                 } else {
-                    packet = new Packet();
+                    device = new Device();
                 }
-                packet.setDevice_id(device_id);
-                packet.setTemperature(temperature);
-                packet.setHumidity(humidity);
-                packet.setDateTime(time);
-                packet.setLight(light);
+                device.setDevice_id(device_id);
+                device.setTemperature(temperature);
+                device.setHumidity(humidity);
+                device.setDateTime(time);
+                device.setLight(light);
                 try {
-                    packet.setHasHumman(this.checkHuman(humidity, light, temperature));
+                    device.setHasHumman(this.checkHuman(humidity, light, temperature));
                 } catch (Exception e) {
                 }
-                packetRepository.save(packet);
+                packetRepository.save(device);
             }
         }
 
@@ -66,7 +66,7 @@ public class TTNMqttService {
     };
 
     @Autowired
-    public TTNMqttService(PacketRepository packetRepository) throws MqttException, Exception {
+    public TTNMqttService(DeviceRepository packetRepository) throws MqttException, Exception {
         this.packetRepository = packetRepository;
     }
 

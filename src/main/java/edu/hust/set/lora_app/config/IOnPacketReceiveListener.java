@@ -1,10 +1,7 @@
 package edu.hust.set.lora_app.config;
 
-import edu.hust.set.lora_app.models.Packet;
+import edu.hust.set.lora_app.models.Device;
 
-/**
- * IOnPacketReceiveListener
- */
 public interface IOnPacketReceiveListener {
-    void OnPacketReceiveEvent(Packet packet);
+    void OnPacketReceiveEvent(Device device);
 }
